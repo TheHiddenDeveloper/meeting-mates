@@ -3,12 +3,12 @@ import { Box, Typography } from "@mui/material";
 import { Calendar } from "../components/scheduling/Calendar";
 import { MeetingForm } from "../components/scheduling/MeetingForm";
 import { UpcomingMeetings } from "../components/scheduling/UpcomingMeetings";
-import { useSnackbar } from "@mui/material/Snackbar";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [selectedTime, setSelectedTime] = useState();
   const [meetings, setMeetings] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
+  const { toast } = useToast();
 
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
@@ -28,7 +28,10 @@ const Index = () => {
     setMeetings([...meetings, newMeeting]);
     setSelectedTime(undefined);
 
-    enqueueSnackbar("Meeting scheduled successfully!", { variant: "success" });
+    toast({
+      title: "Success",
+      description: "Meeting scheduled successfully!",
+    });
   };
 
   return (
