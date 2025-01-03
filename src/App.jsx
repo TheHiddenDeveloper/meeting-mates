@@ -1,23 +1,23 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Container } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-        </Routes>
+        <Container maxWidth="lg">
+          <Routes>
+            <Route path="/" element={<Index />} />
+          </Routes>
+        </Container>
       </BrowserRouter>
-    </TooltipProvider>
+    </LocalizationProvider>
   </QueryClientProvider>
 );
 

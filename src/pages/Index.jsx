@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Calendar } from "@/components/scheduling/Calendar";
-import { MeetingForm } from "@/components/scheduling/MeetingForm";
-import { UpcomingMeetings } from "@/components/scheduling/UpcomingMeetings";
-import { useToast } from "@/hooks/use-toast";
+import { Box, Typography } from "@mui/material";
+import { Calendar } from "../components/scheduling/Calendar";
+import { MeetingForm } from "../components/scheduling/MeetingForm";
+import { UpcomingMeetings } from "../components/scheduling/UpcomingMeetings";
+import { useSnackbar } from "@mui/material/Snackbar";
 
 const Index = () => {
   const [selectedTime, setSelectedTime] = useState();
   const [meetings, setMeetings] = useState([]);
-  const { toast } = useToast();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
@@ -27,17 +28,16 @@ const Index = () => {
     setMeetings([...meetings, newMeeting]);
     setSelectedTime(undefined);
 
-    toast({
-      title: "Success",
-      description: "Meeting scheduled successfully!",
-    });
+    enqueueSnackbar("Meeting scheduled successfully!", { variant: "success" });
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Schedule a Meeting</h1>
+    <Box sx={{ py: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Schedule a Meeting
+      </Typography>
       
-      <div className="space-y-8">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Calendar onTimeSelect={handleTimeSelect} />
         
         {selectedTime && (
@@ -49,8 +49,8 @@ const Index = () => {
         )}
 
         <UpcomingMeetings meetings={meetings} />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
