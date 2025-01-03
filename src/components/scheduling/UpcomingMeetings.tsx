@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Paper, Typography, Box, Divider } from "@mui/material";
 import { Meeting } from "@/types/meeting";
 import { formatTime, formatDate } from "@/utils/date";
 
@@ -9,31 +9,39 @@ interface UpcomingMeetingsProps {
 export const UpcomingMeetings = ({ meetings }: UpcomingMeetingsProps) => {
   if (meetings.length === 0) {
     return (
-      <Card className="p-6">
-        <p className="text-center text-gray-500">No upcoming meetings</p>
-      </Card>
+      <Paper sx={{ p: 3 }}>
+        <Typography align="center" color="text.secondary">
+          No upcoming meetings
+        </Typography>
+      </Paper>
     );
   }
 
   return (
-    <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Upcoming Meetings</h3>
-      <div className="space-y-4">
-        {meetings.map((meeting) => (
-          <div
-            key={meeting.id}
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <h4 className="font-medium">{meeting.title}</h4>
-            <p className="text-sm text-gray-500">
-              {formatDate(meeting.startTime)} at {formatTime(meeting.startTime)}
-            </p>
-            {meeting.description && (
-              <p className="text-sm text-gray-600 mt-2">{meeting.description}</p>
-            )}
-          </div>
+    <Paper sx={{ p: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        Upcoming Meetings
+      </Typography>
+      <Box sx={{ mt: 2 }}>
+        {meetings.map((meeting, index) => (
+          <Box key={meeting.id}>
+            {index > 0 && <Divider sx={{ my: 2 }} />}
+            <Box sx={{ p: 2, '&:hover': { bgcolor: 'action.hover' } }}>
+              <Typography variant="subtitle1">
+                {meeting.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {formatDate(meeting.startTime)} at {formatTime(meeting.startTime)}
+              </Typography>
+              {meeting.description && (
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {meeting.description}
+                </Typography>
+              )}
+            </Box>
+          </Box>
         ))}
-      </div>
-    </Card>
+      </Box>
+    </Paper>
   );
 };

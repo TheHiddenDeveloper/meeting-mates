@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Container, Typography, Box } from "@mui/material";
 import { Calendar } from "@/components/scheduling/Calendar";
 import { MeetingForm } from "@/components/scheduling/MeetingForm";
 import { UpcomingMeetings } from "@/components/scheduling/UpcomingMeetings";
@@ -39,10 +40,12 @@ const Index = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Schedule a Meeting</h1>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Schedule a Meeting
+      </Typography>
       
-      <div className="space-y-8">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Calendar onTimeSelect={handleTimeSelect} />
         
         {selectedTime && (
@@ -54,8 +57,8 @@ const Index = () => {
         )}
 
         <UpcomingMeetings meetings={meetings} />
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 

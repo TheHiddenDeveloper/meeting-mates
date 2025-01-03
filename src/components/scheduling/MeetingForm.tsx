@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Paper, TextField, Button, Typography, Box } from "@mui/material";
 import { formatTime, formatDate } from "@/utils/date";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,33 +43,40 @@ export const MeetingForm = ({
   };
 
   return (
-    <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Schedule Meeting</h3>
-      <p className="text-sm text-gray-500 mb-4">
+    <Paper sx={{ p: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        Schedule Meeting
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
         {formatDate(selectedTime)} at {formatTime(selectedTime)}
-      </p>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Input
-            placeholder="Meeting Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <Textarea
-            placeholder="Meeting Description (optional)"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={onCancel}>
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+        <TextField
+          fullWidth
+          label="Meeting Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          margin="normal"
+          required
+        />
+        <TextField
+          fullWidth
+          label="Meeting Description (optional)"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          margin="normal"
+          multiline
+          rows={3}
+        />
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+          <Button variant="outlined" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">Schedule Meeting</Button>
-        </div>
-      </form>
-    </Card>
+          <Button type="submit" variant="contained">
+            Schedule Meeting
+          </Button>
+        </Box>
+      </Box>
+    </Paper>
   );
 };
