@@ -26,25 +26,7 @@ export const Calendar = ({ onTimeSelect, meetings = [] }) => {
   // Check if a time slot is available
   const isTimeSlotAvailable = (time) => {
     console.log('Checking availability for:', time);
-    
-    // Check if the slot exists in available slots
-    const isAvailable = availableSlots.some(slot => 
-      new Date(slot).getTime() === time.getTime()
-    );
-    console.log('Slot available in user schedule:', isAvailable);
-
-    // Check for conflicts with existing meetings
-    const hasConflict = meetings.some(meeting => {
-      const meetingTime = new Date(meeting.time);
-      const conflict = meetingTime.getTime() === time.getTime();
-      if (conflict) {
-        console.log('Conflict found with meeting:', meeting.title);
-      }
-      return conflict;
-    });
-    console.log('Has conflicts:', hasConflict);
-
-    return isAvailable && !hasConflict;
+    return availableSlots.some(slot => new Date(slot).getTime() === time.getTime());
   };
 
   return (

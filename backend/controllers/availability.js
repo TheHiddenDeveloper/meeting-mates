@@ -17,3 +17,42 @@ exports.getAvailableSlots = (req, res, next) => {
         next(error);
     }
 };
+
+// Remove a slot when booked
+exports.removeSlot = (req, res, next) => {
+    try {
+        const { userId, slot } = req.body;
+        
+        if (!userAvailability[userId]) {
+            throw new Error('User not found.');
+        }
+
+        userAvailability[userId] = userAvailability[userId].filter(
+            existingSlot => existingSlot !== slot
+        );
+
+        res.json({ success: true });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Add slot back when meeting is cancelled
+exports.addSlot = (req, res, next) => {
+    try {
+        const { userId, slot } = req.body;
+        
+        if (!userAvailability[userId]) {
+            throw new Error('User not found.');
+        }
+
+        if (!userAvailability[userId].includes(slot)) {
+            userAvailability[userId].push(slot);
+            userAvailability[userId].sort();
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        next(error);
+    }
+};

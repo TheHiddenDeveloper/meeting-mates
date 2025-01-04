@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { getAvailableSlots } = require('../controllers/availability');
+const { getAvailableSlots, removeSlot, addSlot } = require('../controllers/availability');
 
-// Fetch available time slots for a user
-router.get('/:userId/available-slots', getAvailableSlots);
+router.get('/:userId', getAvailableSlots);
+router.post('/remove-slot', removeSlot);
+router.post('/add-slot', addSlot);
 
 module.exports = router;

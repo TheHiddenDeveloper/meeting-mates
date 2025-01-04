@@ -14,15 +14,6 @@ exports.createMeeting = (req, res, next) => {
         const meetingId = meetings.length + 1;
         const meetingTime = moment.tz(`${date} ${time}`, 'YYYY-MM-DD HH:mm', 'UTC').toISOString();
 
-        // Check for conflicts
-        const conflict = meetings.some(meeting => {
-            return participants.some(participant => meeting.participants.includes(participant) && meeting.time === meetingTime);
-        });
-
-        if (conflict) {
-            throw new Error('Scheduling conflict detected.');
-        }
-
         const meeting = {
             id: meetingId,
             title,
@@ -32,6 +23,13 @@ exports.createMeeting = (req, res, next) => {
         };
 
         meetings.push(meeting);
+
+        // Remove the booked slot from availability
+        fetch('/api/availability/remove-slot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: participants[0], slot: meetingTime })
+        });
 
         console.log(`Notification: Meeting '${title}' scheduled with participants ${participants.join(', ')}.`);
 
@@ -57,16 +55,22 @@ exports.updateMeeting = (req, res, next) => {
             throw new Error('All fields are required.');
         }
 
+        const oldMeeting = meetings[meetingIndex];
         const meetingTime = moment.tz(`${date} ${time}`, 'YYYY-MM-DD HH:mm', 'UTC').toISOString();
 
-        // Check for conflicts
-        const conflict = meetings.some((meeting, index) => {
-            return index !== meetingIndex && participants.some(participant => meeting.participants.includes(participant) && meeting.time === meetingTime);
+        // Add old slot back to availability
+        fetch('/api/availability/add-slot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: oldMeeting.participants[0], slot: oldMeeting.time })
         });
 
-        if (conflict) {
-            throw new Error('Scheduling conflict detected.');
-        }
+        // Remove new slot from availability
+        fetch('/api/availability/remove-slot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: participants[0], slot: meetingTime })
+        });
 
         meetings[meetingIndex] = { id: meetingId, title, time: meetingTime, duration, participants };
 
@@ -90,6 +94,13 @@ exports.deleteMeeting = (req, res, next) => {
         }
 
         const [deletedMeeting] = meetings.splice(meetingIndex, 1);
+
+        // Add slot back to availability
+        fetch('/api/availability/add-slot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: deletedMeeting.participants[0], slot: deletedMeeting.time })
+        });
 
         console.log(`Notification: Meeting '${deletedMeeting.title}' canceled.`);
 
