@@ -1,69 +1,58 @@
-# Welcome to your Lovable project
+# Docs for Front-End - Scheduler
 
-## Project info
+A web application for scheduling and managing meetings.
 
-**URL**: https://lovable.dev/projects/8ed5ae8b-9465-4cd6-9447-2ba0cdfa0f3a
+## Table of Contents
 
-## How can I edit this code?
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Components](#components)
+- [Libraries and Tools](#libraries-and-tools)
+- [Contributing](#contributing)
+- [License](#license)
 
-There are several ways of editing your application.
+## Installation
 
-**Use Lovable**
+1. Clone the repository.
+2. Install the dependencies using `npm install` or `yarn install`.
+3. Set up the environment variables if necessary.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8ed5ae8b-9465-4cd6-9447-2ba0cdfa0f3a) and start prompting.
+## Usage
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Start the development server using `npm run dev` or `yarn dev`.
+2. Open your browser and visit `http://localhost:8080` (or the specified port).
+3. Interact with the application to schedule and manage meetings.
 
-**Use your preferred IDE**
+## Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Meeting scheduling with calendar integration
+- Meeting form for creating and editing meetings
+- Upcoming meetings display
+- Toast notifications for meeting reminders
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Components
 
-Follow these steps:
+- `Calendar`: A calendar component for selecting meeting dates and times.
+- `MeetingForm`: A form component for creating and editing meetings.
+- `UpcomingMeetings`: A component for displaying upcoming meetings.
+- `Toast`: A notification component for meeting reminders.
+- `Command`: A command palette component for quick actions.
+- `Drawer`: A drawer component for navigation and settings.
+- `Sheet`: A sheet component for displaying meeting details.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Libraries and Tools
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- `React`: A JavaScript library for building user interfaces.
+- `Embla Carousel`: A carousel library for displaying meeting images.
+- `Radix UI`: A UI component library for building accessible and customizable components.
+- `Tailwind CSS`: A utility-first CSS framework for styling components.
+- `Vite`: A development server and build tool for fast and efficient development.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Contributing
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-**Edit a file directly in GitHub**
+## License
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/8ed5ae8b-9465-4cd6-9447-2ba0cdfa0f3a) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the [MIT License](LICENSE).
