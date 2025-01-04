@@ -5,11 +5,54 @@ import { MeetingForm } from "@/components/scheduling/MeetingForm";
 import { UpcomingMeetings } from "@/components/scheduling/UpcomingMeetings";
 import { Meeting } from "@/types/meeting";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 const Index = () => {
   const [selectedTime, setSelectedTime] = useState<Date>();
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const { toast } = useToast();
+
+  // Fetch meetings
+  const { data: meetings = [], refetch: refetchMeetings } = useQuery({
+    queryKey: ['meetings'],
+    queryFn: async () => {
+      const response = await fetch('/meetings');
+      if (!response.ok) {
+        throw new Error('Failed to fetch meetings');
+      }
+      return response.json();
+    },
+  });
+
+  // Create meeting mutation
+  const createMeetingMutation = useMutation({
+    mutationFn: async (meetingData: any) => {
+      const response = await fetch('/meetings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(meetingData),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to create meeting');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      refetchMeetings();
+      toast({
+        title: "Success",
+        description: "Meeting scheduled successfully!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleTimeSelect = (time: Date) => {
     setSelectedTime(time);
@@ -20,44 +63,46 @@ const Index = () => {
     description: string;
     startTime: Date;
   }) => {
-    const newMeeting: Meeting = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...meeting,
+    createMeetingMutation.mutate({
+      title: meeting.title,
+      date: meeting.startTime.toISOString().split('T')[0],
+      time: meeting.startTime.toISOString().split('T')[1].substring(0, 5),
       duration: 30,
-      participants: {
-        freelancerId: "freelancer-1",
-        clientId: "client-1",
-      },
-    };
-
-    setMeetings([...meetings, newMeeting]);
-    setSelectedTime(undefined);
-
-    toast({
-      title: "Success",
-      description: "Meeting scheduled successfully!",
+      participants: ["freelancer-1", "client-1"], // In a real app, this would come from auth context
     });
+    setSelectedTime(undefined);
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom>
+    <Container maxWidth="lg" className="py-8">
+      <Typography variant="h4" component="h1" className="mb-8 text-center font-bold">
         Schedule a Meeting
       </Typography>
       
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <Calendar onTimeSelect={handleTimeSelect} />
-        
-        {selectedTime && (
-          <MeetingForm
-            selectedTime={selectedTime}
-            onSubmit={handleScheduleMeeting}
-            onCancel={() => setSelectedTime(undefined)}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <Calendar 
+            onTimeSelect={handleTimeSelect}
+            meetings={meetings}
           />
-        )}
+          
+          {selectedTime && (
+            <MeetingForm
+              selectedTime={selectedTime}
+              onSubmit={handleScheduleMeeting}
+              onCancel={() => setSelectedTime(undefined)}
+            />
+          )}
+        </div>
 
-        <UpcomingMeetings meetings={meetings} />
-      </Box>
+        <div>
+          <UpcomingMeetings 
+            meetings={meetings}
+            onUpdateMeeting={() => {}} // To be implemented in next iteration
+            onCancelMeeting={() => {}} // To be implemented in next iteration
+          />
+        </div>
+      </div>
     </Container>
   );
 };

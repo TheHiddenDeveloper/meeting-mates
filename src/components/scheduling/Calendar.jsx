@@ -9,14 +9,15 @@ export const Calendar = ({ onTimeSelect, meetings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   // Fetch available slots for the selected date
-  const { data: availableSlots = [] } = useQuery({
+  const { data: availableSlots = [], isLoading } = useQuery({
     queryKey: ["availableSlots", selectedDate],
     queryFn: async () => {
-      const response = await fetch(`/users/1/available-slots`); // User ID would come from auth context
+      const response = await fetch(`/users/1/available-slots`);
       if (!response.ok) {
         throw new Error("Failed to fetch available slots");
       }
-      return response.json();
+      const data = await response.json();
+      return data.availableSlots;
     },
   });
 
@@ -24,20 +25,24 @@ export const Calendar = ({ onTimeSelect, meetings = [] }) => {
 
   // Check if a time slot is available
   const isTimeSlotAvailable = (time) => {
+    console.log('Checking availability for:', time);
+    
     // Check if the slot exists in available slots
     const isAvailable = availableSlots.some(slot => 
       new Date(slot).getTime() === time.getTime()
     );
+    console.log('Slot available in user schedule:', isAvailable);
 
     // Check for conflicts with existing meetings
     const hasConflict = meetings.some(meeting => {
-      const meetingTime = new Date(meeting.startTime);
-      return (
-        meetingTime.getDate() === time.getDate() &&
-        meetingTime.getHours() === time.getHours() &&
-        meetingTime.getMinutes() === time.getMinutes()
-      );
+      const meetingTime = new Date(meeting.time);
+      const conflict = meetingTime.getTime() === time.getTime();
+      if (conflict) {
+        console.log('Conflict found with meeting:', meeting.title);
+      }
+      return conflict;
     });
+    console.log('Has conflicts:', hasConflict);
 
     return isAvailable && !hasConflict;
   };
@@ -55,16 +60,20 @@ export const Calendar = ({ onTimeSelect, meetings = [] }) => {
 
       <Card className="p-4 flex-1">
         <h3 className="font-semibold mb-4">{formatDate(selectedDate)}</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {timeSlots.map((time) => (
-            <TimeSlot
-              key={time.toISOString()}
-              time={time}
-              isAvailable={isTimeSlotAvailable(time)}
-              onClick={onTimeSelect}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <p className="text-center text-gray-500">Loading available slots...</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {timeSlots.map((time) => (
+              <TimeSlot
+                key={time.toISOString()}
+                time={time}
+                isAvailable={isTimeSlotAvailable(time)}
+                onClick={onTimeSelect}
+              />
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   );
