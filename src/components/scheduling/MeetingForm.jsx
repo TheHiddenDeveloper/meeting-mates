@@ -39,21 +39,17 @@ export const MeetingForm = ({ selectedTime, onSubmit, onCancel }) => {
       </p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Meeting Title</label>
           <Input
-            placeholder="Enter meeting title"
+            placeholder="Meeting Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Description</label>
           <Textarea
-            placeholder="Enter meeting description"
+            placeholder="Meeting Description (optional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={4}
           />
         </div>
         <div className="flex justify-end gap-2">
