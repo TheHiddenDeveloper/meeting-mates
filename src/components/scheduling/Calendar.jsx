@@ -4,10 +4,22 @@ import { Card } from "@/components/ui/card";
 import { TimeSlot } from "./TimeSlot";
 import { getTimeSlots, formatDate } from "@/utils/date";
 
-export const Calendar = ({ onTimeSelect }) => {
+export const Calendar = ({ onTimeSelect, meetings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const timeSlots = getTimeSlots(selectedDate);
+
+  // Check if a time slot is available (not conflicting with existing meetings)
+  const isTimeSlotAvailable = (time) => {
+    return !meetings.some(meeting => {
+      const meetingTime = new Date(meeting.startTime);
+      return (
+        meetingTime.getDate() === time.getDate() &&
+        meetingTime.getHours() === time.getHours() &&
+        meetingTime.getMinutes() === time.getMinutes()
+      );
+    });
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
@@ -27,6 +39,7 @@ export const Calendar = ({ onTimeSelect }) => {
             <TimeSlot
               key={time.toISOString()}
               time={time}
+              isAvailable={isTimeSlotAvailable(time)}
               onClick={onTimeSelect}
             />
           ))}
