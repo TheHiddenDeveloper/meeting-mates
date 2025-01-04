@@ -3,15 +3,34 @@ import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
 import { TimeSlot } from "./TimeSlot";
 import { getTimeSlots, formatDate } from "@/utils/date";
+import { useQuery } from "@tanstack/react-query";
 
 export const Calendar = ({ onTimeSelect, meetings = [] }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  // Fetch available slots for the selected date
+  const { data: availableSlots = [] } = useQuery({
+    queryKey: ["availableSlots", selectedDate],
+    queryFn: async () => {
+      const response = await fetch(`/users/1/available-slots`); // User ID would come from auth context
+      if (!response.ok) {
+        throw new Error("Failed to fetch available slots");
+      }
+      return response.json();
+    },
+  });
+
   const timeSlots = getTimeSlots(selectedDate);
 
-  // Check if a time slot is available (not conflicting with existing meetings)
+  // Check if a time slot is available
   const isTimeSlotAvailable = (time) => {
-    return !meetings.some(meeting => {
+    // Check if the slot exists in available slots
+    const isAvailable = availableSlots.some(slot => 
+      new Date(slot).getTime() === time.getTime()
+    );
+
+    // Check for conflicts with existing meetings
+    const hasConflict = meetings.some(meeting => {
       const meetingTime = new Date(meeting.startTime);
       return (
         meetingTime.getDate() === time.getDate() &&
@@ -19,6 +38,8 @@ export const Calendar = ({ onTimeSelect, meetings = [] }) => {
         meetingTime.getMinutes() === time.getMinutes()
       );
     });
+
+    return isAvailable && !hasConflict;
   };
 
   return (

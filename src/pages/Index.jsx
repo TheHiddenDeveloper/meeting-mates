@@ -14,18 +14,30 @@ const Index = () => {
   const { data: meetings = [], refetch: refetchMeetings } = useQuery({
     queryKey: ["meetings"],
     queryFn: async () => {
-      // This would be replaced with actual API call
-      console.log("Fetching meetings...");
-      return [];
+      const response = await fetch("/meetings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch meetings");
+      }
+      return response.json();
     },
   });
 
   // Schedule meeting mutation
   const scheduleMutation = useMutation({
     mutationFn: async (meetingData) => {
-      console.log("Scheduling meeting:", meetingData);
-      // This would be replaced with actual API call
-      return { id: Date.now(), ...meetingData };
+      const response = await fetch("/meetings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(meetingData),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to schedule meeting");
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -38,19 +50,28 @@ const Index = () => {
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to schedule meeting. Please try again.",
+        description: error.message || "Failed to schedule meeting",
         variant: "destructive",
       });
-      console.error("Schedule meeting error:", error);
     },
   });
 
   // Update meeting mutation
   const updateMutation = useMutation({
-    mutationFn: async (meetingData) => {
-      console.log("Updating meeting:", meetingData);
-      // This would be replaced with actual API call
-      return meetingData;
+    mutationFn: async ({ id, ...meetingData }) => {
+      const response = await fetch(`/meetings/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(meetingData),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to update meeting");
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -62,19 +83,24 @@ const Index = () => {
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to update meeting. Please try again.",
+        description: error.message || "Failed to update meeting",
         variant: "destructive",
       });
-      console.error("Update meeting error:", error);
     },
   });
 
   // Cancel meeting mutation
   const cancelMutation = useMutation({
     mutationFn: async (meetingId) => {
-      console.log("Canceling meeting:", meetingId);
-      // This would be replaced with actual API call
-      return meetingId;
+      const response = await fetch(`/meetings/${meetingId}`, {
+        method: "DELETE",
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to cancel meeting");
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -86,20 +112,16 @@ const Index = () => {
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to cancel meeting. Please try again.",
+        description: error.message || "Failed to cancel meeting",
         variant: "destructive",
       });
-      console.error("Cancel meeting error:", error);
     },
   });
 
   const handleScheduleMeeting = (meetingData) => {
     scheduleMutation.mutate({
       ...meetingData,
-      participants: {
-        freelancerId: "freelancer-1", // This would come from auth context
-        clientId: "client-1", // This would come from auth context
-      },
+      participants: ["freelancer-1", "client-1"], // This would come from auth context in a real app
     });
   };
 
