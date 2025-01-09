@@ -1,58 +1,179 @@
-# Docs for Front-End - Scheduler
+# Meeting Mates
 
-A web application for scheduling and managing meetings.
+Meeting Mates is a web application built with React, Vite, and Tailwind CSS. It provides a scheduling interface with various UI components and hooks.
 
-## Table of Contents
+## Project Structure
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Components](#components)
-- [Libraries and Tools](#libraries-and-tools)
-- [Contributing](#contributing)
-- [License](#license)
+```
+.gitignore
+bun.lockb
+components.json
+eslint.config.js
+index.html
+package.json
+postcss.config.js
+public/
+README.md
+src/
+	App.css
+	App.jsx
+	components/
+		scheduling/
+			Calendar.jsx
+			MeetingForm.jsx
+			TimeSlot.jsx
+			UpcomingMeetings.jsx
+		ui/
+			accordion.tsx
+			alert-dialog.tsx
+			alert.tsx
+			chart.tsx
+			...
+	hooks/
+		use-mobile.tsx
+		use-toast.ts
+	index.css
+	lib/
+		utils.ts
+	main.jsx
+	pages/
+		Index.jsx
+	types/
+		meeting.ts
+	utils/
+		date.js
+	vite-env.d.ts
+tailwind.config.ts
+vite.config.ts
+```
 
-## Installation
+## Getting Started
 
-1. Clone the repository.
-2. Install the dependencies using `npm install` or `yarn install`.
-3. Set up the environment variables if necessary.
+### Prerequisites
 
-## Usage
+- Node.js
+- npm or yarn
 
-1. Start the development server using `npm run dev` or `yarn dev`.
-2. Open your browser and visit `http://localhost:8080` (or the specified port).
-3. Interact with the application to schedule and manage meetings.
+### Installation
 
-## Features
+1. Clone the repository:
 
-- Meeting scheduling with calendar integration
-- Meeting form for creating and editing meetings
-- Upcoming meetings display
-- Toast notifications for meeting reminders
+```sh
+git clone <repository-url>
+cd meeting-mates
+```
+
+2. Install dependencies:
+
+```sh
+npm install
+# or
+yarn install
+```
+
+### Running the Development Server
+
+To start the development server, run:
+
+```sh
+npm run dev
+# or
+yarn dev
+```
+
+The application will be available at `http://localhost:8080`.
+
+### Building for Production
+
+To build the project for production, run:
+
+```sh
+npm run build
+# or
+yarn build
+```
+
+The built files will be in the `dist` directory.
+
+### Linting
+
+To lint the project, run:
+
+```sh
+npm run lint
+# or
+yarn lint
+```
+
+## Project Configuration
+
+### Vite Configuration
+
+The Vite configuration is located in
+
+vite.config.ts
+
+. It includes settings for the development server, plugins, and module resolution.
+
+### ESLint Configuration
+
+The ESLint configuration is located in
+
+eslint.config.js
+
+. It includes rules and plugins for linting JavaScript and React code.
+
+### Tailwind CSS Configuration
+
+The Tailwind CSS configuration is located in
+
+tailwind.config.ts
+
+. It includes customizations for the Tailwind CSS framework.
 
 ## Components
 
-- `Calendar`: A calendar component for selecting meeting dates and times.
-- `MeetingForm`: A form component for creating and editing meetings.
-- `UpcomingMeetings`: A component for displaying upcoming meetings.
-- `Toast`: A notification component for meeting reminders.
-- `Command`: A command palette component for quick actions.
-- `Drawer`: A drawer component for navigation and settings.
-- `Sheet`: A sheet component for displaying meeting details.
+### Scheduling Components
 
-## Libraries and Tools
+- Calendar.jsx
+- MeetingForm.jsx
+- TimeSlot.jsx
+- UpcomingMeetings.jsx
 
-- `React`: A JavaScript library for building user interfaces.
-- `Embla Carousel`: A carousel library for displaying meeting images.
-- `Radix UI`: A UI component library for building accessible and customizable components.
-- `Tailwind CSS`: A utility-first CSS framework for styling components.
-- `Vite`: A development server and build tool for fast and efficient development.
+### UI Components
 
-## Contributing
+- Accordion
+- AlertDialog
+- Alert
+- Chart
+- ...
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+## Hooks
+
+- useMobile
+- useToast
+
+## Utilities
+
+- utils.ts
+- date.js
+
+## Types
+
+- meeting.ts
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## Contact
+
+For any questions or inquiries, please contact the project maintainer.
+
+---
+
+This documentation provides an overview of the project structure, setup instructions, and key components. For more detailed information, refer to the source code and comments within the files.
